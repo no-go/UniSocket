@@ -1,12 +1,12 @@
 #include <iostream>
 #include <chrono>		// sleep_for() -> c++2011
-#include <thread>
+#include <thread>		// -> c++2011
 #include <cstdlib>		//atoi()
 #include "UniSocket.hpp"
 using namespace std;
-
+    
 #define POLLINGMYSEC 500000
-
+    
 void threadHandle(UniSocket usock) {
 	string msg;
 	// polling bis header kommt, dann blockierend so viele
@@ -23,7 +23,7 @@ void threadHandle(UniSocket usock) {
 	usock.send("Hallo "+ usock.getIp() + ". Warum " + msg + "?");
 	usock.close();
 }
-
+    
 int main(int argc, char * argv[]) {
 	if (argc < 2) {
 		cout<<"usage: "<<argv[0]<<" <port>"<<endl;
