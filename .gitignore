@@ -1,4 +1,6 @@
 .DS_Store
-v5*
 *.o
-msvcr120.txt
+*.lib
+*.obj
+*.elf
+
