@@ -50,21 +50,14 @@ fulfil your desire!
 - see **issues**
 - feel free to generate shared Libraries! I did it in the past!
 
-## The Example
+## Build The Example
 
-For the example on Linux, OS X and Windows you need the files:
+For the example on Linux, OS X and Windows you need cmake. Then do:
 
-- client.cpp (example)
-- server.cpp (example)
-- UniSocket.cpp
-- UniSocket.hpp
-
-E.G. on Linux you need the Linux Wrapper code and the shell script
-to compile and link the example:
-
-- SocketWrapperLinux.cpp
-- SocketWrapperLinux.hpp
-- makeLinux.sh
+- mkdir build
+- cd build
+- cmake ..
+- cmake --build . -v
 
 ### client.cpp
 
