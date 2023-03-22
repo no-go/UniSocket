@@ -37,49 +37,28 @@ SocketWrapper::SocketWrapper(const string & ip, const int & port) {
 }
 
 void SocketWrapper::send(const string & data) {
-	string msg = to_string(data.length()) + HEADERSPLITTER + data;
-	::send((SOCKET)_socket, msg.c_str(), msg.length(), 0);
-/*	string msg = to_string(data.length());
-	::send((SOCKET)_socket, msg.c_str(), msg.length(), 0);
-	this_thread::sleep_for(chrono::seconds(1)); // c++2011
-	msg = HEADERSPLITTER + data;
-	::send((SOCKET)_socket, msg.c_str(), msg.length(), 0);
-*/
+	::send((SOCKET)_socket, data.c_str(), data.length(), 0);
 }
 
-string SocketWrapper::recv(bool polling) {
+string SocketWrapper::recv(void) {
 	static bool headerReaded = false;
 	static string result;
-	static int datasize;
 	int len;
+	bool isDone = false;
 	int flags = 0;
-	u_long iMode;
-	if(polling == true) { 
-		iMode = 1;
-		ioctlsocket(_socket, FIONBIO, &iMode);
-	}
-	if(headerReaded == false) {
-		// header search
-		do {
-			char tmp = '\0';
-			len = ::recv(_socket, &tmp, 1, flags);
-			if(len > 0) {
-				result += tmp;
-			} else {
-				throw UniSocketException("timeout");
-			}
-		} while(result.find(HEADERSPLITTER) == string::npos);
-		headerReaded = true;
-		int datastart = result.find(HEADERSPLITTER);
-		datasize = stoi(result.substr(0, datastart).c_str());
-		result.clear();
-	}
-	iMode = 0;
+	u_long iMode = 1;
 	ioctlsocket(_socket, FIONBIO, &iMode);
-	char * data = new char[datasize+1]();
-	::recv(_socket, data, datasize, MSG_WAITALL);
-	headerReaded = false;
-	return data;
+
+	do {
+		char tmp = '\0';
+		len = ::recv(_socket, &tmp, 1, MSG_DONTWAIT);
+		if(len > 0) {
+			result += tmp;
+		} else {
+			isDone = true;
+		}
+	} while(isDone == false);
+	return result;
 }
 
 void SocketWrapper::close(void) {

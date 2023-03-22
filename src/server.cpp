@@ -5,22 +5,19 @@
 #include "UniSocket.hpp"
 using namespace std;
     
-#define POLLINGMYSEC 500000
+#define POLLINGMYSEC 100000
     
 void threadHandle(UniSocket usock) {
 	string msg;
-	// polling bis header kommt, dann blockierend so viele
-	// byte lesen, wie es im header steht
 	while(true) {
 		try {
-			msg = usock.recv(true);
+			msg = usock.recv();
 			break;
 		} catch(UniSocketException & e) {
 			this_thread::sleep_for(chrono::microseconds(POLLINGMYSEC));
 		}
 	}
-	cout << "client "<< usock.getIp() << " sagt: " << msg << endl;
-	usock.send("Hallo "+ usock.getIp() + ". Warum " + msg + "?");
+	cout << usock.getIp() << ": " << msg << endl;
 	usock.close();
 }
     
@@ -30,7 +27,7 @@ int main(int argc, char * argv[]) {
 		return 1;
 	}
 	try {
-		UniServerSocket svr(atoi(argv[1]), 5);
+		UniServerSocket svr(atoi(argv[1]), 150);
 		while (1) {
 			thread t(threadHandle, svr.accept());
 			t.detach();

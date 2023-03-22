@@ -21,7 +21,7 @@ public:
 	);
 	
 	void send(const std::string & data);
-	std::string recv(bool polling);
+	std::string recv(void);
 	void close(void);
 
 	// server

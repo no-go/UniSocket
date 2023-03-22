@@ -1,18 +1,14 @@
 # UniSocket
 
 UniSocket is an universal Socket (Wrapper) in C++ and works 
-on Linux, OS X and Windows (VisualC++). An example and
-some shell and batch scripts for compilation and linking
-are included.
+on Linux, OS X and Windows (VisualC++).
 
 ## Features
 
 - makes a c++ object orientated version of the Socket API
 - actually only TCP
-- polling for *recv()* is an option
+- polling for *recv()*
 - clean splitting of potentially OS dependent Code
-- uses a header with the size of the transmitted bytes
-- header is seperated by 2 newlines
 
 ## The Classes
 
@@ -30,8 +26,7 @@ are included.
 
 ### UniSocketException Class
 
-This object is thrown on errors or if you use polling with
-the *recv(true)* method. You get the thrown message as
+This object is thrown on errors. You get the thrown message as
 string from the public attribute *_msg*.
 
 ### SocketWrapper Class
@@ -40,15 +35,6 @@ This class protects you from using OS dependent implemetations
 and pretends to be OS indendent. For a nice and clean developing
 please do not use this Class; only the UniSocket classes should
 fulfil your desire!
-
-## Hints
-
-- polling: *recv(true)* only runs on header receiving!
-  After the header is readed, the *revc(true)* is waiting
-  until the expected size is received.
-- sorry about my strange english
-- see **issues**
-- feel free to generate shared Libraries! I did it in the past!
 
 ## Build The Example
 
@@ -97,12 +83,10 @@ int main(int argc, char * argv[]) {
 #include "UniSocket.hpp"
 using namespace std;
     
-#define POLLINGMYSEC 500000
+#define POLLINGMYSEC 100000
     
 void threadHandle(UniSocket usock) {
 	string msg;
-	// polling bis header kommt, dann blockierend so viele
-	// byte lesen, wie es im header steht
 	while(true) {
 		try {
 			msg = usock.recv(true);
@@ -111,8 +95,8 @@ void threadHandle(UniSocket usock) {
 			this_thread::sleep_for(chrono::microseconds(POLLINGMYSEC));
 		}
 	}
-	cout << "client "<< usock.getIp() << " sagt: " << msg << endl;
-	usock.send("Hallo "+ usock.getIp() + ". Warum " + msg + "?");
+	cout << "client "<< usock.getIp() << " says: " << msg << endl;
+	usock.send("Hallo "+ usock.getIp() + ". Why " + msg + "?");
 	usock.close();
 }
     

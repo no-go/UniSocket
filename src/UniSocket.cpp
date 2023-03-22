@@ -19,8 +19,8 @@ void UniSocket::send(const std::string & data) {
 	_sock.send(data);
 }
 
-std::string UniSocket::recv(bool polling) {
-	return _sock.recv(polling);
+std::string UniSocket::recv(void) {
+	return _sock.recv();
 }
 
 void UniSocket::close(void) {

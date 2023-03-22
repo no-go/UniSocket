@@ -13,8 +13,6 @@
 	#define DllExport
 #endif
 
-#define HEADERSPLITTER "\n\n"
-
 class DllExport UniSocketException {
 public:
 	std::string _msg;
@@ -42,15 +40,7 @@ public:
 
 	void send(const std::string & data);
 	
-	/**
-	 * Mit dem polling Parameter kann man polling aktivieren.
-	 * Das Polling laeuft bis der Header gelesen wurde, dann 
-	 * wird jedoch mit blockierendem Lesen so viele bytes gelesen,
-	 * wie es im Header steht.
-	 * 
-	 * @param polling to activate optional non-blocking reading
-	 */
-	std::string recv(bool polling=false);
+	std::string recv(void);
 	void close(void);
 };
 
